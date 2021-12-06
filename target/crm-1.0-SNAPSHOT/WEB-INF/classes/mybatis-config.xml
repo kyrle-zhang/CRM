@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--约束文件-->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--配置信息-->
+<configuration>
+
+    <properties resource="jdbc.properties"/>
+
+    <settings>
+        <!--输出执行的SQL语句和参数-->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+    </settings>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor" />
+    </plugins>
+
+    <!--
+        <environments default="development">环境配置
+        其中的default必须和下面具体的环境配置中的某个id值相同
+        告诉Mybatis访问哪个数据库
+
+    -->
+    <environments default="development">
+        <!--
+            <environment id="development">
+            一个数据库的配置信息
+            id表示这个环境配置的名称，是一个唯一值
+        -->
+        <environment id="development">
+            <!--
+                <transactionManager type="JDBC"/>表示mybatis的事务类型
+                type=JDBC表示使用JDBC中的Connection对象的commit,rollback做事务处理
+            -->
+            <transactionManager type="JDBC"/>
+            <!--
+                <dataSource type="POOLED">表示数据源
+                type="POOLED"表示使用连接池
+            -->
+            <dataSource type="POOLED">
+                <!--
+                    连接数据库的具体配置
+                    其中的name值都不可改动，必须是固定的
+                -->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--
+       <mapper resource="edu/NEU/dao/StudentDAO.xml"/>
+       指定mapper映射文件的位置，一个mapper标签对应一个映射文件的位置
+    -->
+    <mappers>
+        <package name="edu.neu.crm.settings.dao"/>
+    </mappers>
+</configuration>
