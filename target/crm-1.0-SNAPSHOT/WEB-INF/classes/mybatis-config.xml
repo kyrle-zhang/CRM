@@ -55,5 +55,6 @@
     -->
     <mappers>
         <package name="edu.neu.crm.settings.dao"/>
+        <package name="edu.neu.crm.workbench.dao"/>
     </mappers>
 </configuration>

@@ -15,6 +15,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		$(function(){
 
+			//将当前的窗口设置为顶层窗口
+			if(window.top!=window){
+				window.top.location = window.location;
+			}
+
 			//每次刷新页面后都要将文本框中的内容清空
 			$("#loginAct").val("");
 			$("#loginPwd").val("");

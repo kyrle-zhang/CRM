@@ -1,22 +1,114 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
+	<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
-<link href="../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<link href="../../jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
 
-<script type="text/javascript" src="../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <script type="text/javascript">
 
 	$(function(){
-		
-		
-		
+
+		//点击创建按钮，打开相应的模态窗口
+		$("#addBtn").click(function (){
+			//引入时间选择控件
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
+
+
+			//打开模态窗口前要从数据库中查询出所有用户的名字为下拉列表铺值
+			$.ajax({
+				url : "workbench/activity/getUserList.do",
+				type : "get",
+				dataType : "json",
+				data : {
+
+				},
+				success : (function(data){
+					//data = [{user1},{user2},{user3}....]
+					let html = "";
+					$.each(data,function (i,n){
+						html += "<option value='" + n.id + "'>" + n.name + "</option>"
+					})
+
+					$("#create-marketActivityOwner").html(html);
+
+					/**
+					 *为下拉列表框赋默认值为当前登陆用户的姓名
+					 *
+					 * <select id="1">张三</select>
+					 * <select id="2">李四</select>
+					 *  方法：
+					 * 		$("#下拉列表框的ID").val(1)即可将默认值设置为张三
+					 */
+					//首先从HttpSession对象中获取当前用户的id
+					//注意在js命令中使用el表达式一定要用双引号括起来
+					let id = "${user.id}";
+					$("#create-marketActivityOwner").val(id)
+					/**
+					 * 使用 模态窗口对象.modal("show") 可以打开模态窗口
+					 */
+					$("#createActivityModal").modal("show");
+				})
+			})
+
+		})
+
+		//点击保存按钮后，向数据库中插入市场活动的数据
+		$("#savaBtn").click(function (){
+
+			$.ajax({
+				url : "workbench/activity/saveActivity.do",
+				type : "post",
+				dataType : "json",
+				data : {
+					"owner" : $.trim($("#create-marketActivityOwner").val()),
+					"name" : $.trim($("#create-marketActivityName").val()),
+					"startDate" : $("#create-startTime").val(),
+					"endDate" : $("#create-endTime").val(),
+					"cost" : $.trim($("#create-cost").val()),
+					"description" : $.trim($("#create-describe").val())
+				},
+				success : (function(data){
+
+					//data: {"success":true/false}
+					//如果保存数据成功
+					if(data.success){
+
+						//清空模态窗口中的内容
+						//这里必须使用原生js中提供的reset方法才能重置整个表单
+						$("#addActivityForm")[0].reset();
+
+						//刷新展示列表
+
+
+						//关闭模态窗口
+						$("#createActivityModal").modal("hide");
+
+					}else{
+						alert("保存失败")
+					}
+
+				})
+			})
+		})
 	});
 	
 </script>
@@ -35,15 +127,13 @@
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form id="addActivityForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-marketActivityOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+									<!--下拉列表的内容由数据库提供-->
 								</select>
 							</div>
                             <label for="create-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
@@ -55,11 +145,11 @@
 						<div class="form-group">
 							<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-startTime">
+								<input type="text" class="form-control time" id="create-startTime">
 							</div>
 							<label for="create-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-endTime">
+								<input type="text" class="form-control time" id="create-endTime">
 							</div>
 						</div>
                         <div class="form-group">
@@ -81,7 +171,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="savaBtn">保存</button>
 				</div>
 			</div>
 		</div>
@@ -202,7 +292,17 @@
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 5px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createActivityModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+					<!--
+						data-toggle="modal":
+							表示点击这个按钮将会打开一个模态窗口
+						data-target="#createActivityModal:
+							表示将要打开哪个模态窗口，以#id的方式来找到该模态窗口
+					-->
+					<!--
+						这种使用属性直接打开模态窗口的做法是不合适的
+						在实际项目开发中使用js命令来打开模态窗口
+					-->
+				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
@@ -222,14 +322,14 @@
 					<tbody>
 						<tr class="active">
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/activity/detail.jsp';">发传单</a></td>
                             <td>zhangsan</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
 						</tr>
                         <tr class="active">
                             <td><input type="checkbox" /></td>
-                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/activity/detail.jsp';">发传单</a></td>
                             <td>zhangsan</td>
                             <td>2020-10-10</td>
                             <td>2020-10-20</td>

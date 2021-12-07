@@ -27,6 +27,7 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
 
+    <!--用户控制器注册-->
     <servlet>
         <servlet-name>UserController</servlet-name>
         <servlet-class>edu.neu.crm.settings.web.controller.UserController</servlet-class>
@@ -34,6 +35,16 @@
     <servlet-mapping>
         <servlet-name>UserController</servlet-name>
         <url-pattern>/settings/user/login.do</url-pattern>
+    </servlet-mapping>
+    <!--市场活动控制器注册-->
+    <servlet>
+        <servlet-name>ActivityController</servlet-name>
+        <servlet-class>edu.neu.crm.workbench.web.controller.ActivityController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActivityController</servlet-name>
+        <url-pattern>/workbench/activity/getUserList.do</url-pattern>
+        <url-pattern>/workbench/activity/saveActivity.do</url-pattern>
     </servlet-mapping>
 
 </web-app>
