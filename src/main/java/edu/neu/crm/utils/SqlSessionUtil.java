@@ -27,7 +27,7 @@ public class SqlSessionUtil {
 		 new SqlSessionFactoryBuilder().build(inputStream);
 		
 	}
-	
+	//保证一个线程中的SqlSession对象是唯一的
 	private static ThreadLocal<SqlSession> t = new ThreadLocal<SqlSession>();
 	
 	public static SqlSession getSqlSession(){

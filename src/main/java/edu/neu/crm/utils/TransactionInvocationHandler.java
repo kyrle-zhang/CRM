@@ -24,16 +24,18 @@ public class TransactionInvocationHandler implements InvocationHandler{
 		Object obj = null;
 		
 		try{
+			//这里获得的SqlSession对象是线程唯一的，也就是真正执行sql语句的那个SqlSession对象
 			session = SqlSessionUtil.getSqlSession();
 			
 			obj = method.invoke(target, args);
-			
+			//在代理类中进行事务处理
 			session.commit();
 		}catch(Exception e){
 			session.rollback();
 			e.printStackTrace();
 			
-			//处理的是什么异常，继续往上抛什么异常
+			//如果被代理的业务类中发生了异常会被在这里直接处理
+			// 如果要在控制层处理就继续往上抛，处理的是什么异常，继续往上抛什么异常
 			throw e.getCause();
 		}finally{
 			SqlSessionUtil.myClose(session);
