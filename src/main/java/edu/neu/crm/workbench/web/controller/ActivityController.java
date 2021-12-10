@@ -1,9 +1,11 @@
 package edu.neu.crm.workbench.web.controller;
 
+import edu.neu.crm.exception.DeleteActivityException;
 import edu.neu.crm.settings.domain.User;
 import edu.neu.crm.settings.service.UserService;
 import edu.neu.crm.settings.service.impl.UserServiceImpl;
 import edu.neu.crm.utils.*;
+import edu.neu.crm.vo.PaginationVO;
 import edu.neu.crm.workbench.domain.Activity;
 import edu.neu.crm.workbench.service.ActivityService;
 import edu.neu.crm.workbench.service.impl.ActivityServiceImpl;
@@ -31,7 +33,62 @@ public class ActivityController extends HttpServlet {
             getUserList(request,response);
         }else if("/workbench/activity/saveActivity.do".equals(path)){
             saveActivity(request,response);
+        }else if("/workbench/activity/getActivity.do".equals(path)){
+            getActivity(request,response);
+        }else if("/workbench/activity/deleteActivity.do".equals(path)){
+            deleteActivity(request,response);
         }
+    }
+
+    private void deleteActivity(HttpServletRequest request, HttpServletResponse response) {
+
+        System.out.println("删除市场活动");
+        //首先获得用户提交的参数
+        String [] ids = request.getParameterValues("id");
+        //调用业务层的方法处理业务
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        Boolean flag = false;
+        try{
+            flag = activityService.deleteActivity(ids);
+        }catch (DeleteActivityException e){
+            e.printStackTrace();
+        }finally {
+            PrintJson.printJsonFlag(response,flag);
+        }
+
+    }
+
+    private void getActivity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("查询市场活动");
+        //1.获取前端传递的查询参数
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
+        String name = request.getParameter("name");
+        String owner = request.getParameter("owner");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        //计算数据库分页查询的起始查询条数
+        Integer skipNo = (Integer.valueOf(pageNo) - 1) * Integer.valueOf(pageSize);
+        //创一个Map集合来封装这些要传递给业务层的数据
+        Map<String,Object> searchParameters = new HashMap();
+        searchParameters.put("skipNo",skipNo);
+        searchParameters.put("pageSize",Integer.valueOf(pageSize));
+        searchParameters.put("name",name);
+        searchParameters.put("owner",owner);
+        searchParameters.put("startDate",startDate);
+        searchParameters.put("endDate",endDate);
+        //2.获取业务层的代理对象
+        ActivityService activityService = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+        /*
+            业务层要返回的数据：
+            数据库记录总条数：分页组件需要
+            市场活动列表：前端展示数据需要
+            由于分页查询功能的使用非常普遍，所以可以专门定义一个VO类来对查询出来的的数据进行封装
+         */
+        PaginationVO<Activity> activityPaginationVO = activityService.getActivity(searchParameters);
+
+        PrintJson.printJsonObj(response,activityPaginationVO);
+
     }
 
     private void saveActivity(HttpServletRequest request, HttpServletResponse response) {

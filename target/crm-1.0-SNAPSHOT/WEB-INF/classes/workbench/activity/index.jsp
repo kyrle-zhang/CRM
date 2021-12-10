@@ -144,7 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#deleteBtn").click(function (){
 			//首先获取被选中的市场活动
 			let $seletedActivity = $("input[name=selectOne]:checked")
-			if($seletedActivity.length == 0){
+			if($seletedActivity == null){
 				alert("请选择要删除的市场活动");
 			}else {
 				//在删除前首先给用户一个友好提示
@@ -155,27 +155,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					for (let i=0;i<$seletedActivity.length;i++){
 						parameter += "id=";
 						parameter += $seletedActivity[i].value;
-						if(i < $seletedActivity.length - 1){
+						if(i < $seletedActivity - 1){
 							parameter += "&";
 						}
 					}
-
+					alert(parameter);
 					//向服务器发送Ajax请求删除数据
-					$.ajax({
-						url : "workbench/activity/deleteActivity.do",
-						type : "post",
-						dataType : "json",
-						data : parameter,
-						success : function (data){
-							//data:{"success":true/false}
-							if (data.success){
-								//删除成功后，刷新展示数据
-								pageList(1,2);
-							}else {
-								alert("删除失败！");
-							}
-						}
-					})
+					// $.ajax({
+					// 	url : "workbench/activity/saveActivity.do",
+					// 	type : "post",
+					// 	dataType : "json",
+					// 	data : parameter,
+					// 	success : function (data){
+					// 		//data:{"success":true/false}
+					// 		if (data.success){
+					// 			//删除成功后，刷新展示数据
+					// 			pageList(1,2);
+					// 		}else {
+					// 			alert("删除失败！");
+					// 		}
+					// 	}
+					// })
 
 				}
 			}

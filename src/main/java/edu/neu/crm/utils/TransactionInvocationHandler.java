@@ -3,7 +3,6 @@ package edu.neu.crm.utils;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-
 import org.apache.ibatis.session.SqlSession;
 
 public class TransactionInvocationHandler implements InvocationHandler{
@@ -31,6 +30,7 @@ public class TransactionInvocationHandler implements InvocationHandler{
 			//在代理类中进行事务处理
 			session.commit();
 		}catch(Exception e){
+			//业务处理中一旦发生异常，立刻回滚事务
 			session.rollback();
 			e.printStackTrace();
 			
