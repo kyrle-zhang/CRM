@@ -2,6 +2,8 @@ package edu.neu.crm.workbench.service.impl;
 
 
 import edu.neu.crm.exception.DeleteActivityException;
+import edu.neu.crm.settings.dao.UserDAO;
+import edu.neu.crm.settings.domain.User;
 import edu.neu.crm.utils.SqlSessionUtil;
 import edu.neu.crm.vo.PaginationVO;
 import edu.neu.crm.workbench.dao.ActivityDAO;
@@ -9,6 +11,7 @@ import edu.neu.crm.workbench.dao.ActivityRemarkDAO;
 import edu.neu.crm.workbench.domain.Activity;
 import edu.neu.crm.workbench.service.ActivityService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +20,7 @@ public class ActivityServiceImpl implements ActivityService{
 
     private ActivityDAO activityDAO = SqlSessionUtil.getSqlSession().getMapper(ActivityDAO.class);
     private ActivityRemarkDAO activityRemarkDAO = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDAO.class);
-
+    private UserDAO userDAO = SqlSessionUtil.getSqlSession().getMapper(UserDAO.class);
 
     @Override
     public Boolean saveActivity(Activity activity) {
@@ -63,12 +66,42 @@ public class ActivityServiceImpl implements ActivityService{
             throw new DeleteActivityException("删除市场活动备注信息失败");
         }else {
             //再删除市场活动表中的记录
-            Integer countInDataA = activityDAO.getById(ids);
+            Integer countInDataA = activityDAO.getByIds(ids);
             Integer countByDeleteA = activityDAO.deleteById(ids);
             if(countInDataA != countByDeleteA){
                 flag = false;
                 throw new DeleteActivityException("删除市场活动失败");
             }
+        }
+
+        return flag;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndActivity(String id) {
+
+        //1.获取用户列表
+        List<User> userList = userDAO.getUserList();
+        //2.根据id获取市场活动
+        Activity activity = activityDAO.getById(id);
+
+        //3.将查询结果拼接成一个Map返回
+        Map<String,Object> map = new HashMap<>();
+        map.put("userList",userList);
+        map.put("activity",activity);
+
+        return map;
+    }
+
+    @Override
+    public Boolean update(Activity activity) {
+
+        Boolean flag = true;
+
+        Integer count = activityDAO.update(activity);
+
+        if(count!=1){
+            flag = false;
         }
 
         return flag;

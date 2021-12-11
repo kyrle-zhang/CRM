@@ -144,7 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#deleteBtn").click(function (){
 			//首先获取被选中的市场活动
 			let $seletedActivity = $("input[name=selectOne]:checked")
-			if($seletedActivity == null){
+			if($seletedActivity.length == 0){
 				alert("请选择要删除的市场活动");
 			}else {
 				//在删除前首先给用户一个友好提示
@@ -155,32 +155,77 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					for (let i=0;i<$seletedActivity.length;i++){
 						parameter += "id=";
 						parameter += $seletedActivity[i].value;
-						if(i < $seletedActivity - 1){
+						if(i < $seletedActivity.length - 1){
 							parameter += "&";
 						}
 					}
-					alert(parameter);
+
 					//向服务器发送Ajax请求删除数据
-					// $.ajax({
-					// 	url : "workbench/activity/saveActivity.do",
-					// 	type : "post",
-					// 	dataType : "json",
-					// 	data : parameter,
-					// 	success : function (data){
-					// 		//data:{"success":true/false}
-					// 		if (data.success){
-					// 			//删除成功后，刷新展示数据
-					// 			pageList(1,2);
-					// 		}else {
-					// 			alert("删除失败！");
-					// 		}
-					// 	}
-					// })
+					$.ajax({
+						url : "workbench/activity/deleteActivity.do",
+						type : "post",
+						dataType : "json",
+						data : parameter,
+						success : function (data){
+							//data:{"success":true/false}
+							if (data.success){
+								//删除成功后，刷新展示数据
+								pageList(1,2);
+							}else {
+								alert("删除失败！");
+							}
+						}
+					})
 
 				}
 			}
 
 		})
+
+		//为修改市场活动按钮绑定一个事件
+		$("#editBtn").click(function (){
+			//首先获取用户选中的市场活动
+			let $selected = $("input[name=selecteOne]:checked");
+			if($selected.length==0){
+				alert("请选择要修改的市场活动");
+			}else if ($selected.length>1){
+				alert("只能选择一条记录");
+			}else {
+				//获取要修改的市场活动的id
+				let id = $selected.val();
+				//向服务器发起ajax请求，获得要修改的市场活动数据
+				$.ajax({
+					url : "workbench/activity/getUserListAndActivity.do",
+					data : {
+						"id" : id
+					},
+					dataType : "json",
+					type : "get",
+					success : function (data){
+						//data = {"userList":[{用户1},{用户2}...],"activity":{市场活动}}
+						//得到后台的数据后首先拼接出要展示的所有用户的姓名的选择列表
+						let html = "";
+						$.each(data.userList,function (i,n){
+							html += "<option value='"+ n.id +"'>"+ n.name +"</option>"
+						})
+						$("#edit-Owner").html(html);
+
+						//接着将查询出的市场活动的信息展示出来
+						$("#edit-Name").val(data.activity.name);
+						$("#edit-startDate").val(data.activity.startDate);
+						$("#edit-endDate").val(data.activity.endDate);
+						$("#edit-cost").val(data.activity.cost);
+						$("#edit-description").val(data.activity.description);
+
+						//别忘了将所有者选择列表框的默认值赋值为该市场活动的原所有者
+						$("#edit-Owner").val(data.activity.owner);
+						//为模态窗口铺完值后，打开模态窗口
+						$("#editActivityModal").modal("show");
+					}
+				})
+			}
+		})
+
 	});
 
 	/**
@@ -336,42 +381,44 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<form class="form-horizontal" role="form">
 					
 						<div class="form-group">
-							<label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+							<label for="edit-Owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-marketActivityOwner">
-								  <option>zhangsan</option>
-								  <option>lisi</option>
-								  <option>wangwu</option>
+								<select class="form-control" id="edit-Owner">
+
 								</select>
 							</div>
-                            <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+                            <label for="edit-Name" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="edit-marketActivityName" value="发传单">
+                                <input type="text" class="form-control" id="edit-Name">
                             </div>
 						</div>
 
 						<div class="form-group">
-							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
+							<label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-startTime" value="2020-10-10">
+								<input type="text" class="form-control" id="edit-startDate">
 							</div>
-							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
+							<label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-endTime" value="2020-10-20">
+								<input type="text" class="form-control" id="edit-endDate">
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label for="edit-cost" class="col-sm-2 control-label">成本</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-cost" value="5,000">
+								<input type="text" class="form-control" id="edit-cost">
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label for="edit-describe" class="col-sm-2 control-label">描述</label>
+							<label for="edit-description" class="col-sm-2 control-label">描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="edit-describe">市场活动Marketing，是指品牌主办或参与的展览会议与公关市场活动，包括自行主办的各类研讨会、客户交流会、演示会、新产品发布会、体验会、答谢会、年会和出席参加并布展或演讲的展览会、研讨会、行业交流会、颁奖典礼等</textarea>
+								<!--
+									textarea标签对正常情况下一定要紧紧的挨着
+									对textarea标签的取值赋值统一使用val()方法(而不是html()方法)
+								-->
+								<textarea class="form-control" rows="3" id="edit-description"></textarea>
 							</div>
 						</div>
 						
@@ -446,7 +493,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						在实际项目开发中使用js命令来打开模态窗口
 					-->
 				  <button type="button" class="btn btn-primary" id="addBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				

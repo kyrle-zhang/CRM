@@ -14,4 +14,8 @@ public interface ActivityService {
     PaginationVO<Activity> getActivity(Map<String, Object> searchParameters);
 
     Boolean deleteActivity(String[] ids) throws DeleteActivityException;
+
+    Map<String, Object> getUserListAndActivity(String id);
+
+    Boolean update(Activity activity);
 }
