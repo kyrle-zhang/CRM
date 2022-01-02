@@ -8,6 +8,11 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+    <!--listener-->
+    <listener>
+        <listener-class>edu.neu.crm.web.listener.SysInitListener</listener-class>
+    </listener>
+
     <!--filter一定要放在servlet前面-->
     <filter>
         <filter-name>EncodingFilter</filter-name>
@@ -49,6 +54,28 @@
         <url-pattern>/workbench/activity/deleteActivity.do</url-pattern>
         <url-pattern>/workbench/activity/getUserListAndActivity.do</url-pattern>
         <url-pattern>/workbench/activity/update.do</url-pattern>
+        <url-pattern>/workbench/activity/detail.do</url-pattern>
+        <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/getRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
     </servlet-mapping>
 
+    <!--线索控制器注册-->
+    <servlet>
+        <servlet-name>ClueController</servlet-name>
+        <servlet-class>edu.neu.crm.workbench.web.controller.ClueController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClueController</servlet-name>
+        <url-pattern>/workbench/clue/getUserList.do</url-pattern>
+        <url-pattern>/workbench/clue/save.do</url-pattern>
+        <url-pattern>/workbench/clue/get.do</url-pattern>
+        <url-pattern>/workbench/clue/detail.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityList.do</url-pattern>
+        <url-pattern>/workbench/clue/saveClueActivityRelation.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityListByClueId.do</url-pattern>
+        <url-pattern>/workbench/clue/deleteBundleById.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityListByName.do</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -100,10 +100,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 						//清空模态窗口中的内容
 						//这里必须使用原生js中提供的reset方法才能重置整个表单
-						//$("#addActivityForm")[0].reset();
+						$("#addActivityForm")[0].reset();
 
-						//刷新展示列表
-						pageList(1,2);
+						//刷新展示列表，保存后回到第一页
+						pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
 
 						//关闭模态窗口
 						$("#createActivityModal").modal("hide");
@@ -123,7 +124,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#hidden-owner").val($.trim($("#search-owner").val()));
 			$("#hidden-startDate").val($.trim($("#search-startDate").val()));
 			$("#hidden-endDate").val($.trim($("#search-endDate").val()));
-			pageList(1,2);
+			/*
+				查询后回到第一页
+			*/
+			pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 		})
 
 		//为全选的复选框绑定事件，触发全选操作
@@ -169,8 +173,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						success : function (data){
 							//data:{"success":true/false}
 							if (data.success){
-								//删除成功后，刷新展示数据
-								pageList(1,2);
+								//删除成功后，刷新展示数据，回到第一页
+								pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 							}else {
 								alert("删除失败！");
 							}
@@ -185,7 +189,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		//为修改市场活动按钮绑定一个事件
 		$("#editBtn").click(function (){
 			//首先获取用户选中的市场活动
-			let $selected = $("input[name=selecteOne]:checked");
+			let $selected = $("input[name=selectOne]:checked");
 			if($selected.length==0){
 				alert("请选择要修改的市场活动");
 			}else if ($selected.length>1){
@@ -226,6 +230,49 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 
+		//为更新市场活动按钮绑定一个事件
+		$("#updateBtn").click(function (){
+
+			let $selected = $("input[name=selectOne]:checked");
+			let id = $selected.val();
+			$.ajax({
+				url : "workbench/activity/update.do",
+				type : "post",
+				dataType : "json",
+				data : {
+					"id" : id,
+					"owner" : $.trim($("#edit-Owner").val()),
+					"name" : $.trim($("#edit-Name").val()),
+					"startDate" : $("#edit-startDate").val(),
+					"endDate" : $("#edit-endDate").val(),
+					"cost" : $.trim($("#edit-cost").val()),
+					"description" : $.trim($("#edit-description").val())
+				},
+				success : (function(data){
+
+					//data: {"success":true/false}
+					//如果保存数据成功
+					if(data.success){
+
+						//刷新展示列表
+						/*
+							$("#activityPage").bs_pagination('getOption', 'currentPage')表示回到当前页
+							$("#activityPage").bs_pagination('getOption', 'rowsPerPage')表示每页展示个数为用户设置的个数
+						 */
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+						//关闭模态窗口
+						$("#editActivityModal").modal("hide");
+
+					}else{
+						alert("修改失败")
+					}
+
+				})
+			})
+		})
+
 	});
 
 	/**
@@ -233,7 +280,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	 * @param pageNo 页码
 	 * @param pageSize 每页展示的记录数
 	 */
-
 	function pageList(pageNo,pageSize){
 
 		//刷新页面后，将全选框设置为未选状态
@@ -262,7 +308,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(data.dataList,function (i,n){
 					html += '<tr class="active">';
 					html += '<td><input type="checkbox" name="selectOne" value="'+ n.id +'"/></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+ n.name +'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+ n.id +'\';">'+ n.name +'</a></td>';
 					html += '<td>'+ n.owner +'</td>';
 					html += '<td>'+ n.startDate +'</td>';
 					html += '<td>'+ n.endDate +'</td>';
@@ -427,7 +473,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+					<button type="button" class="btn btn-primary" id="updateBtn">更新</button>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.neu.crm.workbench.dao.ClueDao">
+	
+	<insert id="save">
+        insert into tbl_clue(id,appellation,owner,company,job,email,phone,website,mphone,state,source,
+            description,contactSummary,nextContactTime,address,createBy,createTime,fullname) values(#{id},#{appellation},
+                #{owner},#{company},#{job},#{email},#{phone},#{website},#{mphone},#{state},#{source},#{description},
+                #{contactSummary},#{nextContactTime},#{address},#{createBy},#{createTime},#{fullname})
+    </insert>
+
+    <select id="getTotalNum" resultType="int">
+        select count(*) from tbl_clue
+    </select>
+
+    <select id="getClueListByPage" resultType="edu.neu.crm.workbench.domain.Clue">
+        select
+        c.fullname as fullname,
+        c.appellation as appellation,
+        u.name as owner,
+        c.company as company,
+        c.phone as phone,
+        c.mphone as mphone,
+        c.state as state,
+        c.source as source,
+        c.id as id
+        from tbl_clue as c
+        join tbl_user as u
+        on u.id=c.owner
+        order by c.createTime
+        asc
+        limit #{skipNo},#{pageSize}
+    </select>
+
+    <select id="getById" resultType="edu.neu.crm.workbench.domain.Clue">
+        select
+        c.fullname as fullname,
+        c.appellation as appellation,
+        u.name as owner,
+        c.company as company,
+        c.job as job,
+        c.email as email,
+        c.phone as phone,
+        c.website as website,
+        c.mphone as mphone,
+        c.state as state,
+        c.source as source,
+        c.description as description,
+        c.contactSummary as contactSummary,
+        c.nextContactTime as nextContactTime,
+        c.address as address,
+        c.id as id,
+        c.createBy as createBy,
+        c.createTime as createTime
+        from
+        tbl_clue as c
+        join
+        tbl_user as u
+        on
+        c.owner = u.id
+        where c.id = #{id}
+    </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

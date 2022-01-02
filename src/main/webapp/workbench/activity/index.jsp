@@ -280,7 +280,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	 * @param pageNo 页码
 	 * @param pageSize 每页展示的记录数
 	 */
-
 	function pageList(pageNo,pageSize){
 
 		//刷新页面后，将全选框设置为未选状态
@@ -309,7 +308,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(data.dataList,function (i,n){
 					html += '<tr class="active">';
 					html += '<td><input type="checkbox" name="selectOne" value="'+ n.id +'"/></td>';
-					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+ n.name +'</a></td>';
+					html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+ n.id +'\';">'+ n.name +'</a></td>';
 					html += '<td>'+ n.owner +'</td>';
 					html += '<td>'+ n.startDate +'</td>';
 					html += '<td>'+ n.endDate +'</td>';

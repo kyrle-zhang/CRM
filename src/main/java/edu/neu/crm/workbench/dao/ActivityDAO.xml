@@ -4,6 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="edu.neu.crm.workbench.dao.ActivityDAO">
 
+        <select id="getActivityListByName" resultType="edu.neu.crm.workbench.domain.Activity">
+            select
+                a.id as id,
+                a.name as name,
+                a.startDate as startDate,
+                a.endDate as endDate,
+                u.name as owner
+            from tbl_activity as a
+                     join tbl_user as u
+                          on a.owner=u.id
+            where a.name like '%' #{activityName} '%'
+        </select>
+        <select id="getActivityList" resultType="edu.neu.crm.workbench.domain.Activity">
+            select
+            a.id as id,
+            a.name as name,
+            a.startDate as startDate,
+            a.endDate as endDate,
+            u.name as owner
+            from tbl_activity as a
+            join tbl_user as u
+            on a.owner=u.id
+            where a.name like '%' #{activityName} '%'
+            and a.id not in(
+                select
+                activityId
+                from tbl_clue_activity_relation as r
+                where r.clueId=#{clueId}
+            )
+        </select>
+
         <insert id="saveActivity" parameterType="edu.neu.crm.workbench.domain.Activity">
             insert into tbl_activity(id,owner,name,startDate,endDate,cost,description,createTime,createBy)
             values(#{id},#{owner},#{name},#{startDate},#{endDate},#{cost},#{description},#{createTime},#{createBy})
@@ -96,4 +127,24 @@
             editBy = #{editBy}
             where id = #{id}
         </update>
+
+        <select id="detail" resultType="edu.neu.crm.workbench.domain.Activity">
+            select
+            a.id,
+            u.name as owner,
+            a.name,
+            a.startDate,
+            a.endDate,
+            a.cost,
+            a.description,
+            a.createTime,
+            a.createBy,
+            a.editTime,
+            a.editBy
+            from tbl_activity a
+            join tbl_user u
+            on a.owner=u.id
+            where
+            a.id=#{id}
+        </select>
 </mapper>

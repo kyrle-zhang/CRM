@@ -1,6 +1,5 @@
 package edu.neu.crm.workbench.service.impl;
 
-
 import edu.neu.crm.exception.DeleteActivityException;
 import edu.neu.crm.settings.dao.UserDAO;
 import edu.neu.crm.settings.domain.User;
@@ -9,8 +8,10 @@ import edu.neu.crm.vo.PaginationVO;
 import edu.neu.crm.workbench.dao.ActivityDAO;
 import edu.neu.crm.workbench.dao.ActivityRemarkDAO;
 import edu.neu.crm.workbench.domain.Activity;
+import edu.neu.crm.workbench.domain.ActivityRemark;
 import edu.neu.crm.workbench.service.ActivityService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,5 +106,69 @@ public class ActivityServiceImpl implements ActivityService{
         }
 
         return flag;
+    }
+
+    @Override
+    public Activity detail(String id) {
+
+        Activity activity = activityDAO.detail(id);
+        return activity;
+    }
+
+    @Override
+    public Boolean saveRemark(ActivityRemark activityRemark) {
+
+        Boolean flag = false;
+        Integer count = activityRemarkDAO.saveRemark(activityRemark);
+        if(count == 1){
+            flag = true;
+        }
+        return flag;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemark(String activityId) {
+
+        List<ActivityRemark> activityRemarkList = activityRemarkDAO.getRemark(activityId);
+        return activityRemarkList;
+    }
+
+    @Override
+    public Boolean deleteRemark(String id) {
+
+        Boolean flag = false;
+        Integer count = activityRemarkDAO.deleteById(id);
+        if(count == 1){
+            flag = true;
+        }
+        return flag;
+    }
+
+    @Override
+    public Boolean updateRemark(ActivityRemark activityRemark) {
+
+        Boolean flag = false;
+        Integer count = activityRemarkDAO.updateRemark(activityRemark);
+        if(count == 1){
+            flag = true;
+        }
+        return flag;
+    }
+
+    @Override
+    public List<Activity> getActivityList(Map<String, Object> map) {
+
+        System.out.println("查询市场活动");
+        List<Activity> activityList = activityDAO.getActivityList(map);
+
+        return activityList;
+    }
+
+    @Override
+    public List<Activity> getActivityListByName(String name) {
+
+        List<Activity> activityList = activityDAO.getActivityListByName(name);
+
+        return activityList;
     }
 }

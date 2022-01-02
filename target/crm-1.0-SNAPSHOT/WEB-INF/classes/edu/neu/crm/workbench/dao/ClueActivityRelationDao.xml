@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.neu.crm.workbench.dao.ClueActivityRelationDao">
+
+    <insert id="save">
+        insert into tbl_clue_activity_relation(id,clueId,activityId) values (#{id},#{clueId},#{activityId})
+    </insert>
+
+    <select id="getActivityListByClueId" resultType="edu.neu.crm.workbench.domain.Activity">
+        select
+        r.id as id,
+        a.name as name,
+        a.startDate as startDate,
+        a.endDate as endDate,
+        u.name as owner
+        from
+        tbl_clue_activity_relation as r
+        join
+        tbl_activity as a
+        on r.activityId = a.id
+        join
+        tbl_user as u
+        on a.owner = u.id
+        where
+        r.clueId = #{clueId}
+    </select>
+
+    <delete id="deleteBundleById">
+        delete from tbl_clue_activity_relation where id=#{id}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
