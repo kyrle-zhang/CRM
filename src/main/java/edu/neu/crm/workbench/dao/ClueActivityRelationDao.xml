@@ -31,6 +31,14 @@
     <delete id="deleteBundleById">
         delete from tbl_clue_activity_relation where id=#{id}
     </delete>
+
+    <select id="getByClueId" resultType="edu.neu.crm.workbench.domain.ClueActivityRelation">
+        select * from tbl_clue_activity_relation where clueId=#{clueId}
+    </select>
+
+    <delete id="deleteBundleByClueId">
+        delete from tbl_clue_activity_relation where clueId=#{clueId}
+    </delete>
 </mapper>
 
 

@@ -2,9 +2,7 @@ package edu.neu.crm.workbench.service;
 
 import edu.neu.crm.exception.SaveClueException;
 import edu.neu.crm.vo.PaginationVO;
-import edu.neu.crm.workbench.domain.Activity;
-import edu.neu.crm.workbench.domain.Clue;
-import edu.neu.crm.workbench.domain.ClueActivityRelation;
+import edu.neu.crm.workbench.domain.*;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +20,12 @@ public interface ClueService {
     List<Activity> getActivityListByClueId(String clueId);
 
     Boolean deleteBundleById(String id);
+
+    Boolean convert(String clueId, Tran tran, String createBy);
+
+    Boolean saveRemark(ClueRemark clueRemark);
+
+    List<ClueRemark> getRemarkList(String clueId);
+
+    Boolean deleteRemark(String id);
 }

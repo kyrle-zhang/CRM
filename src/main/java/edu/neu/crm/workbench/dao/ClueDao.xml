@@ -63,6 +63,14 @@
         c.owner = u.id
         where c.id = #{id}
     </select>
+
+    <select id="getOwnerIdByClueId" resultType="edu.neu.crm.workbench.domain.Clue">
+        select * from tbl_clue where id = #{id}
+    </select>
+
+    <delete id="delete">
+        delete from tbl_clue where id=#{clueId}
+    </delete>
 </mapper>
 
 

@@ -12,4 +12,8 @@ public interface ClueActivityRelationDao {
     List<Activity> getActivityListByClueId(String clueId);
 
     Integer deleteBundleById(String id);
+
+    List<ClueActivityRelation> getByClueId(String clueId);
+
+    Integer deleteBundleByClueId(String clueId);
 }

@@ -54,6 +54,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(this).children("span").css("color","#E6E6E6");
 		});
 
+		$("#clueRemarkBody").on("mouseover",".remarkDiv",function(){
+			$(this).children("div").children("div").show();
+		})
+		$("#clueRemarkBody").on("mouseout",".remarkDiv",function(){
+			$(this).children("div").children("div").hide();
+		})
+		//页面刷新完成后刷新备注展示列表
+		displayClueRemarkList("${clue.id}");
 		//页面刷新完成后刷新关联的市场活动列表
 		displayActivityList("${clue.id}");
 
@@ -71,7 +79,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#activityBody").on("click",$("input[name=selectOne]"),function (){
 			$("#selectAll").prop("checked",$("input[name=selectOne]").length==$("input[name=selectOne]:checked").length);
 		});
-
         //为关联市场活动按钮绑定事件
         $("#relateActivityBtn").click(function (){
             //打开模态窗口
@@ -144,6 +151,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                 return false;
             }
         })
+		//为保存线索备注的按钮绑定事件
+		$("#saveClueRemarkBtn").click(function (){
+			$.ajax({
+				url: "workbench/clue/saveRemark.do",
+				data: {
+					"noteContent" : $("#remark").val(),
+					"editFlag" : 0,
+					"clueId" : "${clue.id}"
+				},
+				dataType: "JSON",
+				type: "POST",
+				success: function (data){
+					if(data.success){
+						//清空noteContent文本域
+						$("#remark").val("");
+						//刷新备注展示列表
+						displayClueRemarkList("${clue.id}");
+					}else {
+						alert("添加备注失败");
+					}
+				}
+			})
+		})
 	})
 
 	/**
@@ -173,7 +203,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	 * @param clueId 线索的id
 	 */
 	function displayActivityList(clueId){
-
 		$.ajax({
 			url : "workbench/clue/getActivityListByClueId.do",
 			data : {
@@ -194,6 +223,64 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				})
 
 				$("#displayActivity").html(html);
+			}
+		})
+	}
+
+	/**
+	 * 获取线索的备注列表
+	 * @param clueId
+	 */
+	function displayClueRemarkList(clueId){
+		$.ajax({
+			url : "workbench/clue/getRemarkList.do",
+			data : {
+				"clueId" : clueId,
+			},
+			dataType : "json",
+			type : "get",
+			success : function (data) {
+				let html = "";
+				$.each(data, function (i, n) {
+					html += '<div class="remarkDiv" style="height: 60px;">';
+					html += '<img title="${clue.owner}" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+					html += '<div style="position: relative; top: -40px; left: 40px;" >';
+					html += '<h5>'+ n.noteContent +'</h5>';
+					html += '<font color="gray">线索</font> <font color="gray">-</font> <b>${clue.fullname}${clue.appellation}-${clue.company}</b> <small style="color: gray;"> 2017-01-22 10:10:10 由${clue.createBy}</small>';
+					html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+					html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html += '&nbsp;&nbsp;&nbsp;&nbsp;';
+					html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+ n.id +'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+					html += '</div>';
+					html += '</div>';
+					html += '</div>';
+				})
+
+				$("#clueRemarkBody").html(html);
+			}
+		})
+	}
+
+	/**
+	 * 删除备注函数
+	 * @param id 备注id
+	 */
+	function deleteRemark(id){
+		$.ajax({
+			url : "workbench/clue/deleteRemark.do",
+			data : {
+				"id" : id
+			},
+			type : "post",
+			dataType : "json",
+			success : function(data){
+				//data={"success":true/false}
+				if(data.success){
+					//删除成功，刷新备注列表
+					displayClueRemarkList("${clue.id}");
+				}else {
+					alert("删除备注失败");
+				}
 			}
 		})
 	}
@@ -511,40 +598,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<h4>备注</h4>
 		</div>
 		
-		<!-- 备注1 -->
-		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
-			<div style="position: relative; top: -40px; left: 40px;" >
-				<h5>哎呦！</h5>
-				<font color="gray">线索</font> <font color="gray">-</font> <b>李四先生-动力节点</b> <small style="color: gray;"> 2017-01-22 10:10:10 由zhangsan</small>
-				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
-				</div>
-			</div>
-		</div>
-		
-		<!-- 备注2 -->
-		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
-			<div style="position: relative; top: -40px; left: 40px;" >
-				<h5>呵呵！</h5>
-				<font color="gray">线索</font> <font color="gray">-</font> <b>李四先生-动力节点</b> <small style="color: gray;"> 2017-01-22 10:20:10 由zhangsan</small>
-				<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
-				</div>
-			</div>
-		</div>
+		<div id="clueRemarkBody"></div>
 		
 		<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
 			<form role="form" style="position: relative;top: 10px; left: 10px;">
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button id="saveClueRemarkBtn" type="button" class="btn btn-primary">保存</button>
 				</p>
 			</form>
 		</div>

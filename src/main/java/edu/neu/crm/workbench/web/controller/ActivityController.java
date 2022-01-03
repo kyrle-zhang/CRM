@@ -97,7 +97,7 @@ public class ActivityController extends HttpServlet {
 
         System.out.println("添加市场活动备注信息");
         String id = UUIDUtil.getUUID();
-        String noteContent = request.getParameter("nodeContent");
+        String noteContent = request.getParameter("noteContent");
         String createTime = DateTimeUtil.getSysTime();
         User user = (User) request.getSession().getAttribute("user");
         String createBy = user.getName();
