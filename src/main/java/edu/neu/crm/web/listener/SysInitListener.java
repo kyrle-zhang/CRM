@@ -7,9 +7,7 @@ import edu.neu.crm.utils.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
 
@@ -27,6 +25,7 @@ public class SysInitListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
         System.out.println("全局作用域对象创建好了");
+        //1.初始化数据字典
         ServletContext servletContext = servletContextEvent.getServletContext();
         DicService dicService = (DicService) ServiceFactory.getService(new DicServiceImpl());
         Map<String, List> map = dicService.getAll();
@@ -35,6 +34,16 @@ public class SysInitListener implements ServletContextListener {
             servletContext.setAttribute(key,map.get(key));
         }
 
+        //2.解析存放交易阶段和可能性的properties文件
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("Stage2Possibility");
+        Enumeration<String> keys = resourceBundle.getKeys();
+        Map<String,String> possibilityMap = new HashMap<>();
+        while (keys.hasMoreElements()){
+            String key = keys.nextElement();
+            String value = resourceBundle.getString(key);
+            possibilityMap.put(key,value);
+        }
+        servletContext.setAttribute("possibilityMap",possibilityMap);
     }
 
     @Override

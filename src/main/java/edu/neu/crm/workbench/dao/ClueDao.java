@@ -13,4 +13,8 @@ public interface ClueDao {
     List<Clue> getClueListByPage(Map<String, Object> searchParameters);
 
     Clue getById(String id);
+
+    Clue getOwnerIdByClueId(String clueId);
+
+    Integer delete(String clueId);
 }

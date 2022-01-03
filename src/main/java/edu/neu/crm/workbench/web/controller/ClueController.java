@@ -9,9 +9,7 @@ import edu.neu.crm.utils.PrintJson;
 import edu.neu.crm.utils.ServiceFactory;
 import edu.neu.crm.utils.UUIDUtil;
 import edu.neu.crm.vo.PaginationVO;
-import edu.neu.crm.workbench.domain.Activity;
-import edu.neu.crm.workbench.domain.Clue;
-import edu.neu.crm.workbench.domain.ClueActivityRelation;
+import edu.neu.crm.workbench.domain.*;
 import edu.neu.crm.workbench.service.ActivityService;
 import edu.neu.crm.workbench.service.ClueService;
 import edu.neu.crm.workbench.service.impl.ActivityServiceImpl;
@@ -52,6 +50,82 @@ public class ClueController extends HttpServlet {
             deleteBundleById(request, response);
         } else if ("/workbench/clue/getActivityListByName.do".equals(path)) {
             getActivityListByName(request, response);
+        } else if ("/workbench/clue/convert.do".equals(path)) {
+            convert(request, response);
+        } else if ("/workbench/clue/saveRemark.do".equals(path)) {
+            saveRemark(request, response);
+        } else if ("/workbench/clue/getRemarkList.do".equals(path)) {
+            getRemarkList(request, response);
+        } else if ("/workbench/clue/deleteRemark.do".equals(path)) {
+            deleteRemark(request, response);
+        }
+    }
+
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("删除线索备注");
+        String id = request.getParameter("id");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Boolean flag = clueService.deleteRemark(id);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getRemarkList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("获取线索备注列表");
+        String clueId = request.getParameter("clueId");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        List<ClueRemark> clueRemarkList = clueService.getRemarkList(clueId);
+        PrintJson.printJsonObj(response,clueRemarkList);
+    }
+
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("保存线索备注");
+        User user = (User) request.getSession().getAttribute("user");
+        String noteContent = request.getParameter("noteContent");
+        String editFlag = request.getParameter("editFlag");
+        String clueId = request.getParameter("clueId");
+        ClueRemark clueRemark = new ClueRemark();
+        clueRemark.setId(UUIDUtil.getUUID());
+        clueRemark.setCreateTime(DateTimeUtil.getSysTime());
+        clueRemark.setCreateBy(user.getName());
+        clueRemark.setEditFlag(editFlag);
+        clueRemark.setNoteContent(noteContent);
+        clueRemark.setClueId(clueId);
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Boolean flag = clueService.saveRemark(clueRemark);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("线索转换");
+        String transactionFlag = request.getParameter("transactionFlag");
+        String clueId = request.getParameter("clueId");
+        ClueService clueService = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        Tran tran = null;
+        User user = (User) request.getSession().getAttribute("user");
+        if("true".equals(transactionFlag)){
+            System.out.println("创建交易的线索转换");
+            tran = new Tran();
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String activityId = request.getParameter("activityId");
+            tran.setId(UUIDUtil.getUUID());
+            tran.setActivityId(activityId);
+            tran.setCreateBy(user.getName());
+            tran.setCreateTime(DateTimeUtil.getSysTime());
+            tran.setExpectedDate(expectedDate);
+            tran.setMoney(money);
+            tran.setStage(stage);
+            tran.setName(name);
+
+        }else {
+            System.out.println("普通的线索转换");
+        }
+        Boolean flag = clueService.convert(clueId,tran,user.getName());
+        //线索转换完成后，直接通过重定向方式跳转到线索初始页面
+        if(flag){
+            response.sendRedirect(request.getContextPath() + "/workbench/clue/index.jsp");
         }
     }
 

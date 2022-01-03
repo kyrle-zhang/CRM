@@ -4,8 +4,123 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="edu.neu.crm.workbench.dao.TranDao">
-	
-  	
+
+    <insert id="save">
+        insert into tbl_tran
+        (
+            id,
+            activityId,
+            createBy,
+            createTime,
+            expectedDate,
+            money,
+            stage,
+            name,
+            contactsId,
+            customerId,
+            owner,
+            source,
+            type,
+            description,
+            contactSummary,
+            nextContactTime
+        )values
+        (
+            #{id},
+            #{activityId},
+            #{createBy},
+            #{createTime},
+            #{expectedDate},
+            #{money},
+            #{stage},
+            #{name},
+            #{contactsId},
+            #{customerId},
+            #{owner},
+            #{source},
+            #{type},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime}
+        )
+    </insert>
+
+    <select id="getTotalNum" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+
+    <select id="getTran" resultType="edu.neu.crm.workbench.domain.Tran">
+        select
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            c.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            a.name as activityId,
+            con.fullname as contactsId,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime
+        from tbl_tran t
+        left join tbl_customer c
+        on t.customerId=c.id
+        left join tbl_user u
+        on t.owner=u.id
+        left join tbl_contacts con
+        on t.contactsId = con.id
+        left join tbl_activity a
+        on t.activityId=a.id
+        order by createTime desc
+        limit #{skipNo},#{pageSize}
+    </select>
+
+    <select id="detail" resultType="edu.neu.crm.workbench.domain.Tran">
+        select
+            t.id,
+            u.name as owner,
+            t.money,
+            t.name,
+            t.expectedDate,
+            c.name as customerId,
+            t.stage,
+            t.type,
+            t.source,
+            a.name as activityId,
+            con.fullname as contactsId,
+            t.createBy,
+            t.createTime,
+            t.editBy,
+            t.editTime,
+            t.description,
+            t.contactSummary,
+            t.nextContactTime
+        from tbl_tran t
+                 left join tbl_customer c
+                           on t.customerId=c.id
+                 left join tbl_user u
+                           on t.owner=u.id
+                 left join tbl_contacts con
+                           on t.contactsId = con.id
+                 left join tbl_activity a
+                           on t.activityId=a.id
+        where t.id=#{id}
+    </select>
+
+    <update id="changeTranStage">
+        update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime} where id=#{id}
+    </update>
+
+    <select id="getChartData" resultType="map">
+        select stage,count(*) as num from tbl_tran group by stage
+    </select>
 </mapper>
 
 

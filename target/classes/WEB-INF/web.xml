@@ -77,5 +77,27 @@
         <url-pattern>/workbench/clue/getActivityListByClueId.do</url-pattern>
         <url-pattern>/workbench/clue/deleteBundleById.do</url-pattern>
         <url-pattern>/workbench/clue/getActivityListByName.do</url-pattern>
+        <url-pattern>/workbench/clue/convert.do</url-pattern>
+        <url-pattern>/workbench/clue/saveRemark.do</url-pattern>
+        <url-pattern>/workbench/clue/getRemarkList.do</url-pattern>
+        <url-pattern>/workbench/clue/deleteRemark.do</url-pattern>
+    </servlet-mapping>
+
+    <!--交易控制器注册-->
+    <servlet>
+        <servlet-name>TranController</servlet-name>
+        <servlet-class>edu.neu.crm.workbench.web.controller.TranController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TranController</servlet-name>
+        <url-pattern>/workbench/transaction/save.do</url-pattern>
+        <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+        <url-pattern>/workbench/transaction/getAllActivity.do</url-pattern>
+        <url-pattern>/workbench/transaction/saveTran.do</url-pattern>
+        <url-pattern>/workbench/transaction/getTran.do</url-pattern>
+        <url-pattern>/workbench/transaction/detail.do</url-pattern>
+        <url-pattern>/workbench/transaction/getTranHistory.do</url-pattern>
+        <url-pattern>/workbench/transaction/changeTranStage.do</url-pattern>
+        <url-pattern>/workbench/transaction/getChartData.do</url-pattern>
     </servlet-mapping>
 </web-app>

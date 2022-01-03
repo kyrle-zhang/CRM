@@ -67,7 +67,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				type : "post",
 				dataType : "json",
 				data : {
-					"nodeContent" : $.trim($("#remark").val()),
+					"noteContent" : $.trim($("#remark").val()),
 					"editFlag" : 0,
 					"activityId" : "${activity.id}"
 				},
