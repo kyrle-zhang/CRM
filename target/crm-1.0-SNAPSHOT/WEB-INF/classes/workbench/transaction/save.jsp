@@ -1,12 +1,18 @@
+<<<<<<< HEAD
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
+=======
+>>>>>>> CRM/master
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+<<<<<<< HEAD
 //获取交易阶段和可能性数据
 Map<String,String> possibilityMap = (Map<String, String>) application.getAttribute("possibilityMap");
 Set<String> keySet = possibilityMap.keySet();
+=======
+>>>>>>> CRM/master
 %>
 <!DOCTYPE html>
 <html>
@@ -22,6 +28,7 @@ Set<String> keySet = possibilityMap.keySet();
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
+<<<<<<< HEAD
 	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
 	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
@@ -60,6 +67,10 @@ Set<String> keySet = possibilityMap.keySet();
 				pickerPosition: "bottom-left"
 			});
 			//自动补全前端插件
+=======
+	<script type="text/javascript">
+		$(function(){
+>>>>>>> CRM/master
 			$("#create-customerName").typeahead({
 				source: function (query, process) {
 					$.get(
@@ -75,6 +86,7 @@ Set<String> keySet = possibilityMap.keySet();
 				delay: 1000
 			});
 
+<<<<<<< HEAD
 			//为交易阶段文本框绑定事件
 			$("#create-Stage").change(function (){
 				//取得交易阶段
@@ -160,6 +172,9 @@ Set<String> keySet = possibilityMap.keySet();
 				}
 			})
 		}
+=======
+		})
+>>>>>>> CRM/master
 	</script>
 </head>
 <body>
@@ -178,7 +193,11 @@ Set<String> keySet = possibilityMap.keySet();
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
+<<<<<<< HEAD
 						    <input type="text" id="search-activity" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+=======
+						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+>>>>>>> CRM/master
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -193,6 +212,7 @@ Set<String> keySet = possibilityMap.keySet();
 								<td>所有者</td>
 							</tr>
 						</thead>
+<<<<<<< HEAD
 						<tbody id="activityBody">
 
 						</tbody>
@@ -205,6 +225,26 @@ Set<String> keySet = possibilityMap.keySet();
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					<button type="button" class="btn btn-primary" id="confirmBtn">确定</button>
 				</div>
+=======
+						<tbody>
+							<tr>
+								<td><input type="radio" name="activity"/></td>
+								<td>发传单</td>
+								<td>2020-10-10</td>
+								<td>2020-10-20</td>
+								<td>zhangsan</td>
+							</tr>
+							<tr>
+								<td><input type="radio" name="activity"/></td>
+								<td>发传单</td>
+								<td>2020-10-10</td>
+								<td>2020-10-20</td>
+								<td>zhangsan</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+>>>>>>> CRM/master
 			</div>
 		</div>
 	</div>
@@ -256,20 +296,37 @@ Set<String> keySet = possibilityMap.keySet();
 			</div>
 		</div>
 	</div>
+<<<<<<< HEAD
 
 	<div style="position:  relative; left: 30px;">
 		<h3>创建交易</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
 			<button type="button" id="saveTranBtn" class="btn btn-primary">保存</button>
+=======
+	
+	
+	<div style="position:  relative; left: 30px;">
+		<h3>创建交易</h3>
+	  	<div style="position: relative; top: -40px; left: 70%;">
+			<button type="button" class="btn btn-primary">保存</button>
+>>>>>>> CRM/master
 			<button type="button" class="btn btn-default">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
+<<<<<<< HEAD
 	<form action="workbench/transaction/saveTran.do" method="post" id="tranForm" class="form-horizontal" role="form" style="position: relative; top: -30px;">
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-transactionOwner" name="owner">
+=======
+	<form class="form-horizontal" role="form" style="position: relative; top: -30px;">
+		<div class="form-group">
+			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+			<div class="col-sm-10" style="width: 300px;">
+				<select class="form-control" id="create-transactionOwner">
+>>>>>>> CRM/master
 					<c:forEach items="${userList}" var="u">
 						<!--EL表达式同样也支持三目运算符-->
 						<option value="${u.id}" ${user.id eq u.id ? "selected" : ""}>${u.name}</option>
@@ -278,29 +335,49 @@ Set<String> keySet = possibilityMap.keySet();
 			</div>
 			<label for="create-amountOfMoney" class="col-sm-2 control-label">金额</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" class="form-control" id="create-amountOfMoney" name="money">
+=======
+				<input type="text" class="form-control" id="create-amountOfMoney">
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-transactionName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" class="form-control" id="create-transactionName" name="name">
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" readonly="readonly" autocomplete="off" class="form-control time2" id="create-expectedClosingDate" name="expectedDate">
+=======
+				<input type="text" class="form-control" id="create-transactionName">
+			</div>
+			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
+			<div class="col-sm-10" style="width: 300px;">
+				<input type="text" class="form-control" id="create-expectedClosingDate">
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-customerName" class="col-sm-2 control-label">客户名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" name="customerName" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
 			</div>
 			<label for="create-Stage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 			  <select class="form-control" id="create-Stage" name="stage">
+=======
+				<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
+			</div>
+			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
+			<div class="col-sm-10" style="width: 300px;">
+			  <select class="form-control" id="create-transactionStage">
+>>>>>>> CRM/master
 			  	<c:forEach items="${stage}" var="s">
 					<option value="${s.value}">${s.text}</option>
 				</c:forEach>
@@ -311,7 +388,11 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-transactionType" class="col-sm-2 control-label">类型</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<select class="form-control" id="create-transactionType" name="type">
+=======
+				<select class="form-control" id="create-transactionType">
+>>>>>>> CRM/master
 					<c:forEach items="${transactionType}" var="t">
 						<option value="${t.value}">${t.text}</option>
 					</c:forEach>
@@ -326,7 +407,11 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<select class="form-control" id="create-clueSource" name="source">
+=======
+				<select class="form-control" id="create-clueSource">
+>>>>>>> CRM/master
 					<c:forEach items="${source}" var="s">
 						<option value="${s.value}">${s.text}</option>
 					</c:forEach>
@@ -334,37 +419,57 @@ Set<String> keySet = possibilityMap.keySet();
 			</div>
 			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input readonly="readonly" type="text" class="form-control" id="create-activitySrc">
 				<input type="hidden" name="activityId" id="create-activityId">
+=======
+				<input type="text" class="form-control" id="create-activitySrc">
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" class="form-control" id="create-contactsName" value="马云">
 				<input type="hidden" name="contactsId" value="8e73c7b89f27438fb0e27821b312762a">
+=======
+				<input type="text" class="form-control" id="create-contactsName">
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
+<<<<<<< HEAD
 				<textarea class="form-control" rows="3" id="create-describe" name="description"></textarea>
+=======
+				<textarea class="form-control" rows="3" id="create-describe"></textarea>
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 			<div class="col-sm-10" style="width: 70%;">
+<<<<<<< HEAD
 				<textarea class="form-control" rows="3" id="create-contactSummary" name="contactSummary"></textarea>
+=======
+				<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+>>>>>>> CRM/master
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" readonly="readonly" autocomplete="off" class="form-control time1" id="create-nextContactTime" name="nextContactTime">
+=======
+				<input type="text" class="form-control" id="create-nextContactTime">
+>>>>>>> CRM/master
 			</div>
 		</div>
 		

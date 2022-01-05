@@ -3,6 +3,7 @@ package edu.neu.crm.workbench.web.controller;
 import edu.neu.crm.settings.domain.User;
 import edu.neu.crm.settings.service.UserService;
 import edu.neu.crm.settings.service.impl.UserServiceImpl;
+<<<<<<< HEAD
 import edu.neu.crm.utils.DateTimeUtil;
 import edu.neu.crm.utils.PrintJson;
 import edu.neu.crm.utils.ServiceFactory;
@@ -17,14 +18,25 @@ import edu.neu.crm.workbench.service.TranService;
 import edu.neu.crm.workbench.service.impl.ActivityServiceImpl;
 import edu.neu.crm.workbench.service.impl.CustomerServiceImpl;
 import edu.neu.crm.workbench.service.impl.TranServiceImpl;
+=======
+import edu.neu.crm.utils.PrintJson;
+import edu.neu.crm.utils.ServiceFactory;
+import edu.neu.crm.workbench.service.CustomerService;
+import edu.neu.crm.workbench.service.impl.CustomerServiceImpl;
+
+>>>>>>> CRM/master
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+<<<<<<< HEAD
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+=======
+import java.util.List;
+>>>>>>> CRM/master
 
 public class TranController extends HttpServlet {
 
@@ -32,6 +44,7 @@ public class TranController extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("进入交易控制器");
         String path = request.getServletPath();
+<<<<<<< HEAD
         if ("/workbench/transaction/save.do".equals(path)) {
             save(request, response);
         } else if ("/workbench/transaction/getCustomerName.do".equals(path)) {
@@ -186,6 +199,14 @@ public class TranController extends HttpServlet {
         map.put("name", name);
         PaginationVO<Activity> activity = activityService.getActivity(map);
         PrintJson.printJsonObj(response, activity);
+=======
+        if("/workbench/transaction/save.do".equals(path)){
+           save(request, response);
+        } else if("/workbench/transaction/getCustomerName.do".equals(path)){
+           getCustomerName(request, response);
+        }
+
+>>>>>>> CRM/master
     }
 
     private void getCustomerName(HttpServletRequest request, HttpServletResponse response) {
@@ -193,14 +214,23 @@ public class TranController extends HttpServlet {
         String name = request.getParameter("name");
         CustomerService customerService = (CustomerService) ServiceFactory.getService(new CustomerServiceImpl());
         List<String> nameList = customerService.getCustomerName(name);
+<<<<<<< HEAD
         PrintJson.printJsonObj(response, nameList);
+=======
+        PrintJson.printJsonObj(response,nameList);
+>>>>>>> CRM/master
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("跳转到创建交易页面");
         UserService userService = (UserService) ServiceFactory.getService(new UserServiceImpl());
         List<User> userList = userService.getUserList();
+<<<<<<< HEAD
         request.setAttribute("userList", userList);
         request.getRequestDispatcher("/workbench/transaction/save.jsp").forward(request, response);
+=======
+        request.setAttribute("userList",userList);
+        request.getRequestDispatcher("/workbench/transaction/save.jsp").forward(request,response);
+>>>>>>> CRM/master
     }
 }

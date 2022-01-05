@@ -92,6 +92,7 @@
         <servlet-name>TranController</servlet-name>
         <url-pattern>/workbench/transaction/save.do</url-pattern>
         <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+<<<<<<< HEAD
         <url-pattern>/workbench/transaction/getAllActivity.do</url-pattern>
         <url-pattern>/workbench/transaction/saveTran.do</url-pattern>
         <url-pattern>/workbench/transaction/getTran.do</url-pattern>
@@ -99,5 +100,7 @@
         <url-pattern>/workbench/transaction/getTranHistory.do</url-pattern>
         <url-pattern>/workbench/transaction/changeTranStage.do</url-pattern>
         <url-pattern>/workbench/transaction/getChartData.do</url-pattern>
+=======
+>>>>>>> CRM/master
     </servlet-mapping>
 </web-app>

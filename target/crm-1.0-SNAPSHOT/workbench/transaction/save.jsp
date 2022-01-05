@@ -22,6 +22,7 @@ Set<String> keySet = possibilityMap.keySet();
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
+<<<<<<< HEAD
 	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
 	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
 	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
@@ -75,12 +76,47 @@ Set<String> keySet = possibilityMap.keySet();
 				delay: 1000
 			});
 
+=======
+
+	<script type="text/javascript">
+		<!--拼接JSON字符串-->
+		let json = {
+			<%
+                for(String key : keySet){
+                    String stage = key;
+                    String possibility = possibilityMap.get(key);
+            %>
+			"<%=key%>" : <%=possibility%>,
+			<%
+                }
+            %>
+		};
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			//自动补全前端插件
+			$("#create-customerName").typeahead({
+				source: function (query, process) {
+					$.get(
+							"workbench/transaction/getCustomerName.do",
+							{ "name" : query },
+							function (data) {
+								//data=[{客户名字1},{客户名字2}...];
+								process(data);
+							},
+							"json"
+					);
+				},
+				delay: 1000
+			});
+>>>>>>> CRM/master
 			//为交易阶段文本框绑定事件
 			$("#create-Stage").change(function (){
 				//取得交易阶段
 				let stage = $("#create-Stage").val();
 				$("#create-possibility").val(json[stage]);
 			})
+<<<<<<< HEAD
 
 			//为查找市场活动文本框绑定键盘监听事件
 			$("#search-activity").keydown(function (event){
@@ -160,6 +196,9 @@ Set<String> keySet = possibilityMap.keySet();
 				}
 			})
 		}
+=======
+		})
+>>>>>>> CRM/master
 	</script>
 </head>
 <body>
@@ -269,7 +308,11 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<select class="form-control" id="create-transactionOwner" name="owner">
+=======
+				<select class="form-control" id="create-transactionOwner">
+>>>>>>> CRM/master
 					<c:forEach items="${userList}" var="u">
 						<!--EL表达式同样也支持三目运算符-->
 						<option value="${u.id}" ${user.id eq u.id ? "selected" : ""}>${u.name}</option>
@@ -296,11 +339,19 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-customerName" class="col-sm-2 control-label">客户名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<input type="text" name="customerName" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
 			</div>
 			<label for="create-Stage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 			  <select class="form-control" id="create-Stage" name="stage">
+=======
+				<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
+			</div>
+			<label for="create-Stage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
+			<div class="col-sm-10" style="width: 300px;">
+			  <select class="form-control" id="create-Stage">
+>>>>>>> CRM/master
 			  	<c:forEach items="${stage}" var="s">
 					<option value="${s.value}">${s.text}</option>
 				</c:forEach>
@@ -311,7 +362,11 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-transactionType" class="col-sm-2 control-label">类型</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<select class="form-control" id="create-transactionType" name="type">
+=======
+				<select class="form-control" id="create-transactionType">
+>>>>>>> CRM/master
 					<c:forEach items="${transactionType}" var="t">
 						<option value="${t.value}">${t.text}</option>
 					</c:forEach>
@@ -326,7 +381,11 @@ Set<String> keySet = possibilityMap.keySet();
 		<div class="form-group">
 			<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 			<div class="col-sm-10" style="width: 300px;">
+<<<<<<< HEAD
 				<select class="form-control" id="create-clueSource" name="source">
+=======
+				<select class="form-control" id="create-clueSource">
+>>>>>>> CRM/master
 					<c:forEach items="${source}" var="s">
 						<option value="${s.value}">${s.text}</option>
 					</c:forEach>

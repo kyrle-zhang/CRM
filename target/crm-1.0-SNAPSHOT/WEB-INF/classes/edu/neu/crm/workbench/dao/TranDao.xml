@@ -44,6 +44,7 @@
             #{nextContactTime}
         )
     </insert>
+<<<<<<< HEAD
 
     <select id="getTotalNum" resultType="int">
         select count(*) from tbl_tran
@@ -121,6 +122,9 @@
     <select id="getChartData" resultType="map">
         select stage,count(*) as num from tbl_tran group by stage
     </select>
+=======
+  	
+>>>>>>> CRM/master
 </mapper>
 
 
