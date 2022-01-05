@@ -1,6 +1,5 @@
 package edu.neu.crm.workbench.service.impl;
 
-<<<<<<< HEAD
 import edu.neu.crm.utils.DateTimeUtil;
 import edu.neu.crm.utils.SqlSessionUtil;
 import edu.neu.crm.utils.UUIDUtil;
@@ -15,18 +14,11 @@ import edu.neu.crm.workbench.service.TranService;
 
 import java.util.*;
 
-=======
-import edu.neu.crm.utils.SqlSessionUtil;
-import edu.neu.crm.workbench.dao.TranDao;
-import edu.neu.crm.workbench.dao.TranHistoryDao;
-import edu.neu.crm.workbench.service.TranService;
-
->>>>>>> CRM/master
 public class TranServiceImpl implements TranService {
 
     private TranDao tranDao = SqlSessionUtil.getSqlSession().getMapper(TranDao.class);
     private TranHistoryDao tranHistoryDao = SqlSessionUtil.getSqlSession().getMapper(TranHistoryDao.class);
-<<<<<<< HEAD
+
     private CustomerDao customerDao = SqlSessionUtil.getSqlSession().getMapper(CustomerDao.class);
 
     @Override
@@ -137,9 +129,4 @@ public class TranServiceImpl implements TranService {
         result.put("numList",numList);
         return result;
     }
-=======
-
-
-
->>>>>>> CRM/master
 }

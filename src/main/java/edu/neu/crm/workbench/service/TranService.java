@@ -1,6 +1,5 @@
 package edu.neu.crm.workbench.service;
 
-<<<<<<< HEAD
 import edu.neu.crm.vo.PaginationVO;
 import edu.neu.crm.workbench.domain.Tran;
 import edu.neu.crm.workbench.domain.TranHistory;
@@ -20,7 +19,4 @@ public interface TranService {
     Boolean changeTranStage(Tran tran);
 
     Map<String, List<Object>> getChartData();
-=======
-public interface TranService {
->>>>>>> CRM/master
 }
